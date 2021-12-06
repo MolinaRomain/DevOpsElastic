@@ -11,5 +11,9 @@
 - Docker / Docker-compose
 - ElasticSearch
 
+## installation
+(il n'y a aps de version latest )
+docker pull elasticsearch:7.14.2
+
 
 
