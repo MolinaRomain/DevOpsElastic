@@ -12,7 +12,7 @@
 - ElasticSearch
 
 ## installation
-(il n'y a aps de version latest )
+(il n'y a pas de version latest )
 docker pull elasticsearch:7.14.2
 
 
