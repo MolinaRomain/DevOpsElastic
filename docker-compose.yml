@@ -1,13 +1,21 @@
 version: '2.2'
 services:
-  es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.12
-    container_name: es01
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    container_name: elasticsearch
+    networks: 
+      docker-elk:
+    
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.2
+    container_name: kibana
     environment:
-      -discovery.type=single-node
-    volumes:
-      - ./data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
     networks:
-      - elastic
+      - docker-elk
+    depends_on:
+      - elasticsearch
+
+networks:
+  docker-elk:
+    driver: bridge
