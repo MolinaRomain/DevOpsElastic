@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.0
@@ -39,6 +39,8 @@ services:
       - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - es-network
 
 volumes:
   data:
