@@ -15,5 +15,8 @@
 (il n'y a pas de version latest )
 docker pull elasticsearch:7.14.2
 
+chown root filebeat.yml
+chmod go-w /usr/share/filebeat/filebeat.yml
+
 
 
