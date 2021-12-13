@@ -1,10 +1,10 @@
 version: '2.2'
 services:
-  node01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
-    container_name: node01
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.0
+    container_name: elasticsearch
     environment:
-      - node.name=node01
+      - node.name=elasticsearch
       - cluster.name=es-cluster-7
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
@@ -13,25 +13,26 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./data:/usr/share/elasticsearch/data
+      - data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - es-network
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.11.1
+    image: docker.elastic.co/kibana/kibana:7.16.0
+    container_name: kibana
     environment:
-      ELASTICSEARCH_HOSTS: http://node01:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
       - 5601:5601
     networks:
       - es-network
     depends_on:
-      - node01
+      - elasticsearch
 
 volumes:
-  es-data01:
+  data:
     driver: local
 
 networks:
