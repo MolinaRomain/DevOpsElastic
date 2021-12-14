@@ -29,8 +29,41 @@ On utilise docker-compose pour la simplicité de configuration
     ''' docker kibana logs '''
 Avant d'utiliser kibana il faut attendre la fin de la configuration du serveur, on peut donc utiliser cette commande
 
-### 
+## Formation du docker-compose
+### elastic search service :
+'''
+elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.0
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-cluster-7
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - es-network
+'''
+- image officiel
+- environment :
+    - nom du node
+    - nom du cluster associé
+    - discovery.type : single ou multiple pour la formation du cluster
+    - ES_JAVA_OPTS : configurer JVM 
+        -xms et xms pour configurer la taille de du tas de la JVM, basé sur la ram, il faut au moins 512 dans notre cas sinon elastics search 
+            aura l'exeption OutOfMemory avec filebeats qui toune en même temps
+    - memlock : éviter le swapping de la mémoire par le node
+    - volume pour les datas d'elasticsearch 
+    - network : sera la même pour nos trois services 
 
+    
 chown root filebeat.yml
 chmod go-w /usr/share/filebeat/filebeat.yml
 
