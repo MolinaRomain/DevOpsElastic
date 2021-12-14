@@ -17,7 +17,7 @@
 (il n'y a pas de version latest pour dockerhub)
 docker pull elasticsearch:7.14.2
 mais on peut utilisé les dépots officiels sans dockerhub :
-    ''' docker.elastic.co/elasticsearch/elasticsearch:7.16.0 '''
+    ``` docker.elastic.co/elasticsearch/elasticsearch:7.16.0 ```
 Les versions d'elasticsearch,filebeats et kibana sont synchronisés, on a utilisé ici la version 7.16.0
 
 Concernant elasticsearch on fonctionne en single node car c'est un exemple, l'utilisé de plusieurs node est purement sécuritaire car cela permet
@@ -26,12 +26,12 @@ Avec un node(virtual or physical host ), si celui si devient down alors le clust
 
 On utilise docker-compose pour la simplicité de configuration 
 
-    ''' docker kibana logs '''
+    ``` docker kibana logs ```
 Avant d'utiliser kibana il faut attendre la fin de la configuration du serveur, on peut donc utiliser cette commande
 
 ## Formation du docker-compose
 ### elastic search service :
-'''
+```
 elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.0
     container_name: elasticsearch
@@ -50,7 +50,7 @@ elasticsearch:
       - 9200:9200
     networks:
       - es-network
-'''
+```
 - image officiel
 - environment :
     - nom du node
