@@ -63,9 +63,77 @@ elasticsearch:
     - volume pour les datas d'elasticsearch 
     - network : sera la même pour nos trois services 
 
-    
+###  kibana service : 
+pour kibana rien de plus simple la seule subtilité est de le mettre sur le même réseau que elastic et de le lié à l'host elastic
+'''
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.16.0
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - es-network
+    depends_on:
+      - elasticsearch
+'''
+
+###  filebeat service : 
+'''
+  filebeat:
+    image: "docker.elastic.co/beats/filebeat:7.16.0"
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - es-network
+'''
+ici on voit la présence de trois volumes :
+  - le premier contient la configuration à partager avec le container filebeat ( composer localement d'un .yml)
+  - le deuxième le lieu où se situe les logs de docker
+  - le troisème le docker socket pour les logs qui ne seraient pas présent dans le deuxième volume
+
+ce qui est important ici pour la configuration c'est de donner de donner les droits d'accès et d'appartement du fichier de configuration dans ./config/
+comme suit : 
+'''
 chown root filebeat.yml
 chmod go-w /usr/share/filebeat/filebeat.yml
+'''
+
+## Le fichier de configuration filebeat
+'''
+filebeat.inputs:
+- type: container
+  paths: 
+    - '/var/lib/docker/containers/*/*.log'
+
+processors:
+- add_docker_metadata:
+    host: "unix:///var/run/docker.sock"
+
+- decode_json_fields:
+    fields: ["level","time","message"]
+    target: "json"
+    overwrite_keys: true
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  indices:
+    - index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+logging.json: true
+logging.metrics.enabled: true
+'''
+
+- filebeat.inputs : correspond au lieux où sont situés les logs à l'intérieur du container
+- add_docker_metadata : obtenir des informations supplémentaires sur les logs comme l'image utilisé, le nom du container ...
+- decode_json_fields : pour parser les logs reçu de docker
+- output.elasticsearch : cette partie sert à dire où sont importer les logs recceuillis par filebeat et comment les indicer
+
 
 
 
