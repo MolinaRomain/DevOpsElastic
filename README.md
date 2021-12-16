@@ -1,6 +1,6 @@
 # Projet DevOps
 
->Membres : Romain MOLINA, Dimitri ROMANO, François BONNIN
+> Membres : Romain MOLINA, Dimitri ROMANO, François BONNIN
 
 Le but ici est d'utiliser Elastic search dans le cadre du monitoring de logs
 pour cet exemple on utilisera les logs fournis par docker, mais l'application de se tuto est valable pour une application personnel ou tout autre
@@ -15,7 +15,7 @@ logiciel qui fournit des logs
 - Docker + Docker-compose 
 - ElasticSearch : logiciel utilisé pour l'indexation, la recherche et analyse de donnée
 - Kibana : interface graphique pour de visualisatiosn des données elastic searchs
-- FileBeats : agent de transfert de données ( devloppé par élasticsearch aussi )
+- FileBeats : agent de transfert de données ( developpé par élasticsearch aussi )
 
 ## installation et choix
 (il n'y a pas de version latest pour dockerhub)
@@ -66,13 +66,13 @@ elasticsearch:
     - discovery.type : single ou multiple pour la formation du cluster
     - ES_JAVA_OPTS : configurer JVM 
         -xms et xms pour configurer la taille de du tas de la JVM, basé sur la ram, il faut au moins 512 dans notre cas sinon elastics search 
-            aura l'exeption OutOfMemory avec filebeats qui toune en même temps
+            aura l'exception OutOfMemory avec filebeats qui toune en même temps
     - memlock : éviter le swapping de la mémoire par le node
     - volume pour les datas d'elasticsearch 
     - network : sera la même pour nos trois services 
 
 ###  kibana service : 
-pour kibana rien de plus simple la seule subtilité est de le mettre sur le même réseau que elastic et de le lié à l'host elastic
+Pour kibana rien de plus simple la seule subtilité est de le mettre sur le même réseau que elastic et de le lié à l'host elastic
 ```
   kibana:
     image: docker.elastic.co/kibana/kibana:7.16.0
@@ -100,12 +100,12 @@ pour kibana rien de plus simple la seule subtilité est de le mettre sur le mêm
     networks:
       - es-network
 ```
-ici on voit la présence de trois volumes :
+Ici on voit la présence de trois volumes :
   - le premier contient la configuration à partager avec le container filebeat ( composer localement d'un .yml)
   - le deuxième le lieu où se situe les logs de docker
   - le troisème le docker socket pour les logs qui ne seraient pas présent dans le deuxième volume
 
-ce qui est important ici pour la configuration c'est de donner de donner les droits d'accès et d'appartement du fichier de configuration dans ./config/
+Ce qui est important ici pour la configuration c'est de donner les droits d'accès et d'appartement du fichier de configuration dans ./config/
 comme suit : 
 ```
 chown root filebeat.yml
