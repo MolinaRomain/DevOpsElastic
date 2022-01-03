@@ -27,7 +27,7 @@ mais on peut utilisé les dépots officiels sans dockerhub :
 Les versions d'elasticsearch,filebeats et kibana sont synchronisés, on a utilisé ici la version 7.16.0
 
 Concernant elasticsearch on fonctionne en single node car c'est un exemple, l'utilisé de plusieurs node est purement sécuritaire car cela permet
-d'augmenter la robuster de notre cluster ( élément constituer de plusieurs nodes qui garde les données et permet l'indexation).
+d'augmenter la robustesse  de notre cluster ( élément constituer de plusieurs nodes qui garde les données et permet l'indexation).
 Avec un node(virtual or physical host ), si celui si devient down alors le cluster sera down aussi.
 
 On utilise docker-compose pour la simplicité de configuration 
